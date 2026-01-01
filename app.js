@@ -174,8 +174,7 @@ zoomSlider.addEventListener('input', (e) => {
 });
 
 function updateImageScale() {
-    mainImage.style.transform = `scale(${currentScale})`;
-    canvasOverlay.style.transform = `scale(${currentScale})`;
+    imageContainer.style.transform = `scale(${currentScale})`;
 }
 
 // --- Blur & Snap ---
