@@ -56,6 +56,7 @@ function setBgColor(color) {
     colorSwatches.forEach(s => {
         s.classList.toggle('active', s.dataset.color === color);
     });
+    saveSettings();
 }
 
 btnRect.addEventListener('click', () => setShape('rect'));
@@ -79,6 +80,45 @@ window.addEventListener('keydown', (e) => {
         setMode(mode === 'edit' ? 'present' : 'edit');
     }
 });
+
+// --- Settings Persistence ---
+function saveSettings() {
+    const settings = {
+        bgColor: getComputedStyle(document.documentElement).getPropertyValue('--workspace-bg').trim(),
+        zoom: zoomSlider.value,
+        blur: blurSlider.value,
+        snap: snapToggle.checked,
+        revealAnim: revealAnimSelect.value
+    };
+    localStorage.setItem('softreveal_settings', JSON.stringify(settings));
+}
+
+function loadSettings() {
+    const saved = localStorage.getItem('softreveal_settings');
+    if (saved) {
+        try {
+            const settings = JSON.parse(saved);
+            if (settings.bgColor) setBgColor(settings.bgColor);
+            if (settings.zoom) {
+                zoomSlider.value = settings.zoom;
+                currentScale = parseFloat(settings.zoom);
+                updateImageScale();
+            }
+            if (settings.blur) {
+                blurSlider.value = settings.blur;
+                blurIntensity = settings.blur;
+            }
+            if (settings.snap !== undefined) {
+                snapToggle.checked = settings.snap;
+            }
+            if (settings.revealAnim) {
+                revealAnimSelect.value = settings.revealAnim;
+            }
+        } catch (e) {
+            console.error("Failed to load settings", e);
+        }
+    }
+}
 
 // --- UI Utilities ---
 function showToast(message) {
@@ -126,17 +166,34 @@ btnClear.addEventListener('click', () => {
     document.querySelectorAll('.blur-segment').forEach(s => s.remove());
 });
 
-blurSlider.addEventListener('input', (e) => {
-    blurIntensity = e.target.value;
-    document.querySelectorAll('.blur-segment').forEach(s => {
-        s.style.backdropFilter = `blur(${blurIntensity}px)`;
-        s.style.webkitBackdropFilter = `blur(${blurIntensity}px)`;
-    });
+// --- Zoom & Image Scaling ---
+zoomSlider.addEventListener('input', (e) => {
+    currentScale = parseFloat(e.target.value);
+    updateImageScale();
+    saveSettings();
 });
 
-zoomSlider.addEventListener('input', (e) => {
-    currentScale = e.target.value;
-    imageContainer.style.transform = `scale(${currentScale})`;
+function updateImageScale() {
+    mainImage.style.transform = `scale(${currentScale})`;
+    canvasOverlay.style.transform = `scale(${currentScale})`;
+}
+
+// --- Blur & Snap ---
+blurSlider.addEventListener('input', (e) => {
+    blurIntensity = e.target.value;
+    document.querySelectorAll('.blur-segment').forEach(seg => {
+        seg.style.backdropFilter = `blur(${blurIntensity}px)`;
+        seg.style.webkitBackdropFilter = `blur(${blurIntensity}px)`;
+    });
+    saveSettings();
+});
+
+snapToggle.addEventListener('change', () => {
+    saveSettings();
+});
+
+revealAnimSelect.addEventListener('change', () => {
+    saveSettings();
 });
 
 // --- Image Loading ---
@@ -445,3 +502,11 @@ window.addEventListener('mouseup', () => {
         currentBlurBox = null;
     }
 });
+
+// --- Initialization ---
+loadSettings();
+if (mainImage.src && !mainImage.src.endsWith('index.html')) {
+    imageContainer.style.display = 'block';
+    emptyState.style.display = 'none';
+    toolbar.style.display = 'flex';
+}

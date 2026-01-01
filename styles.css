@@ -98,16 +98,20 @@ header {
 }
 
 .donate-btn,
-.enter-btn {
-    min-width: 140px;
-    justify-content: center;
+.enter-btn,
+.secondary-btn,
+.nav-controls .enter-btn {
+    min-width: 140px !important;
+    height: 42px !important;
+    justify-content: center !important;
+    white-space: nowrap !important;
 }
 
 .lang-controls {
     display: flex;
     gap: 0.5rem;
     background: rgba(255, 255, 255, 0.05);
-    padding: 4px;
+    padding: 0;
     border-radius: 12px;
     border: 1px solid var(--border-color);
 }
@@ -122,6 +126,11 @@ header {
     font-size: 0.8rem;
     font-weight: 700;
     transition: all var(--transition-speed);
+    min-width: 50px !important;
+    height: 42px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
 }
 
 .lang-btn:hover {
@@ -635,6 +644,43 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 /* Toggle Switch */
+.logo-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    padding: 5px;
+    border-radius: 8px;
+}
+
+.logo-container::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -150%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg,
+            transparent 45%,
+            rgba(255, 255, 255, 0.1) 48%,
+            rgba(255, 255, 255, 0.3) 50%,
+            rgba(255, 255, 255, 0.1) 52%,
+            transparent 55%);
+    transform: rotate(-25deg);
+    animation: flareMove 4s infinite linear;
+    pointer-events: none;
+}
+
+@keyframes flareMove {
+    0% {
+        left: -150%;
+    }
+
+    100% {
+        left: 150%;
+    }
+}
+
 .toggle-container {
     display: flex;
     align-items: center;
