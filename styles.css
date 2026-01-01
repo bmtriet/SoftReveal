@@ -75,6 +75,28 @@ header {
     align-items: center;
 }
 
+.github-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #24292e;
+    /* GitHub Dark */
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 12px;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.github-btn:hover {
+    background: #1a1e22;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(36, 41, 46, 0.5);
+}
+
 .donate-btn {
     display: flex;
     align-items: center;
@@ -97,6 +119,7 @@ header {
     box-shadow: 0 5px 15px rgba(0, 112, 186, 0.3);
 }
 
+.github-btn,
 .donate-btn,
 .enter-btn,
 .secondary-btn,
@@ -366,6 +389,11 @@ section {
     max-height: 80vh;
     pointer-events: none;
     transition: transform 0.2s ease-out;
+}
+
+/* Hide image if no src is set to prevent broken image icon */
+#mainImage:not([src]) {
+    display: none;
 }
 
 .canvas-overlay {

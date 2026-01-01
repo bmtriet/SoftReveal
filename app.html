@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoftReveal — App</title>
+    <link rel="icon" type="image/png" href="assets/favicon.png">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .main-app-container {
+            text-align: center;
+        }
+        .placeholder-text {
+            font-size: 2rem;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <header class="glass">
+        <div class="logo-container">
+            <img src="assets/logo.png" alt="SoftReveal" class="logo-img">
+        </div>
+        <div class="nav-controls">
+            <a href="https://github.com/bmtriet/SoftReveal" target="_blank" class="github-btn">
+                <i class="ph-bold ph-github-logo"></i>
+                GitHub
+            </a>
+            <a href="https://paypal.me/softreveal" target="_blank" class="donate-btn">
+                <i class="ph-bold ph-heart"></i>
+                Donate
+            </a>
+            <div class="lang-controls">
+                <button class="lang-btn" data-lang="en">EN</button>
+                <button class="lang-btn" data-lang="vi">VI</button>
+                <button class="lang-btn" data-lang="zh">ZH</button>
+            </div>
+            <a href="index.html" class="enter-btn secondary">Back to Intro</a>
+        </div>
+    </header>
+
+    <main class="app-workspace" id="workspace">
+        <div class="empty-state" id="emptyState">
+            <div class="upload-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            </div>
+            <h2>Paste an image or Drag & Drop</h2>
+            <p>Ctrl+V to paste from clipboard</p>
+        </div>
+        
+        <div class="image-container" id="imageContainer" style="display: none;">
+            <img id="mainImage" alt="Workspace Image">
+            <div class="canvas-overlay" id="canvasOverlay"></div>
+        </div>
+    </main>
+
+    <div class="floating-toolbar glass" id="toolbar" style="display: none;">
+        <div class="tool-group">
+            <button class="tool-btn active" id="btnEdit" title="Edit Mode (Draw Blur)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+            </button>
+            <button class="tool-btn" id="btnPresent" title="Present Mode (Click to Reveal)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+        </div>
+        <div class="divider"></div>
+        <div class="tool-group">
+            <button id="btnRect" class="tool-btn active" title="Rectangle (R)">
+                <i class="ph-bold ph-rectangle"></i>
+            </button>
+            <button id="btnCircle" class="tool-btn" title="Circle (C)">
+                <i class="ph-bold ph-circle"></i>
+            </button>
+        </div>
+        <div class="divider"></div>
+        <div class="tool-group">
+            <div class="color-palette">
+                <button class="color-swatch active" style="background: #0d0d0f;" data-color="#0d0d0f" title="Midnight"></button>
+                <button class="color-swatch" style="background: #1a1a2e;" data-color="#1a1a2e" title="Deep Sea"></button>
+                <button class="color-swatch" style="background: #2e1a2e;" data-color="#2e1a2e" title="Twilight"></button>
+                <button class="color-swatch" style="background: #1a2e1a;" data-color="#1a2e1a" title="Forest"></button>
+                <div class="color-picker-wrapper">
+                    <input type="color" id="bgColorPicker" value="#0d0d0f" title="Custom Color">
+                    <i class="ph-bold ph-palette"></i>
+                </div>
+            </div>
+        </div>
+        <div class="divider"></div>
+        <div class="tool-group intensity-group">
+            <span>Zoom</span>
+            <input type="range" id="zoomSlider" min="0.5" max="2" step="0.1" value="1">
+        </div>
+        <div class="divider"></div>
+        <div class="tool-group intensity-group">
+            <span>Blur</span>
+            <input type="range" id="blurSlider" min="5" max="50" value="20">
+        </div>
+        <div class="divider"></div>
+        <div class="tool-group intensity-group">
+            <span>Reveal</span>
+            <select id="revealAnimSelect" class="glass-select">
+                <option value="fadeout" selected>Fade Out</option>
+                <option value="disappear">Disappear</option>
+                <option value="zoom-out">Zoom Out</option>
+                <option value="swipe-left">Swipe Left</option>
+                <option value="swipe-right">Swipe Right</option>
+                <option value="swipe-up">Swipe Up</option>
+                <option value="swipe-down">Swipe Down</option>
+                <option value="peel-right">Peel Off</option>
+            </select>
+        </div>
+        <div class="divider"></div>
+        <div class="tool-group">
+            <label class="toggle-container" title="Snap to Edges">
+                <input type="checkbox" id="snapToggle">
+                <span class="toggle-slider"></span>
+                <span class="toggle-label">Snap</span>
+            </label>
+        </div>
+        <div class="divider"></div>
+        <div class="tool-group">
+            <button class="tool-btn danger" id="btnClear" title="Clear All">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast glass" style="display: none;"></div>
+
+    <!-- Context Menu -->
+    <div id="contextMenu" class="context-menu glass" style="display: none;">
+        <div id="editMenuItems">
+            <button class="menu-item" id="menuDuplicate">Duplicate</button>
+            <button class="menu-item danger" id="menuDelete">Delete</button>
+        </div>
+        <div id="presentMenuItems" style="display: none;">
+            <button class="menu-item" id="menuStopPresent">Stop Present</button>
+        </div>
+    </div>
+
+    <script src="i18n.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
