@@ -19,11 +19,15 @@
         <div class="nav-controls">
             <a href="https://github.com/bmtriet/SoftReveal" target="_blank" class="github-btn">
                 <i class="ph-bold ph-github-logo"></i>
-                GitHub
+                <span>GitHub</span>
+            </a>
+            <a href="https://www.producthunt.com/products/softreveal-reveal-less-engage-more" target="_blank" class="producthunt-btn">
+                <i class="ph-bold ph-rocket-launch"></i>
+                <span>Product Hunt</span>
             </a>
             <a href="https://paypal.me/softreveal" target="_blank" class="donate-btn">
                 <i class="ph-bold ph-heart"></i>
-                Donate
+                <span>Donate</span>
             </a>
             <div class="lang-controls">
                 <button class="lang-btn" data-lang="en">EN</button>
@@ -31,8 +35,36 @@
                 <button class="lang-btn" data-lang="zh">ZH</button>
             </div>
             <a href="app.html" class="enter-btn">Enter App</a>
+            <button class="menu-toggle mobile-only" id="menuToggle">
+                <i class="ph-bold ph-list"></i>
+            </button>
         </div>
     </header>
+
+    <div class="mobile-menu-overlay glass" id="mobileMenu">
+        <div class="mobile-menu-content">
+            <button class="menu-close" id="menuClose">
+                <i class="ph-bold ph-x"></i>
+            </button>
+            <nav class="mobile-nav">
+                <a href="https://github.com/bmtriet/SoftReveal" target="_blank">
+                    <i class="ph-bold ph-github-logo"></i> GitHub
+                </a>
+                <a href="https://www.producthunt.com/products/softreveal-reveal-less-engage-more" target="_blank">
+                    <i class="ph-bold ph-rocket-launch"></i> Product Hunt
+                </a>
+                <a href="https://paypal.me/softreveal" target="_blank">
+                    <i class="ph-bold ph-heart"></i> Donate
+                </a>
+                <div class="mobile-lang-controls">
+                    <button class="lang-btn" data-lang="en">EN</button>
+                    <button class="lang-btn" data-lang="vi">VI</button>
+                    <button class="lang-btn" data-lang="zh">ZH</button>
+                </div>
+                <a href="app.html" class="enter-btn">Enter App</a>
+            </nav>
+        </div>
+    </div>
 
     <main>
         <section class="hero">
@@ -65,7 +97,7 @@
         </section>
 
         <section id="problem">
-            <div class="glass" style="padding: 60px; text-align: center;">
+            <div class="glass problem-container">
                 <h2 class="section-title">The Problem We Solve</h2>
                 <p style="font-size: 1.25rem; max-width: 900px; margin: 0 auto; color: var(--text-secondary);"></p>
             </div>

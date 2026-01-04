@@ -30,6 +30,20 @@ body {
     transition: background 0.5s ease;
 }
 
+.mobile-only {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .mobile-only {
+        display: block;
+    }
+
+    .desktop-only {
+        display: none;
+    }
+}
+
 /* Glassmorphism utility */
 .glass {
     background: rgba(13, 13, 15, 0.85);
@@ -97,6 +111,28 @@ header {
     box-shadow: 0 5px 15px rgba(36, 41, 46, 0.5);
 }
 
+.producthunt-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #da552f;
+    /* Product Hunt Orange */
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 12px;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.producthunt-btn:hover {
+    background: #c44d2a;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(218, 85, 47, 0.4);
+}
+
 .donate-btn {
     display: flex;
     align-items: center;
@@ -120,6 +156,7 @@ header {
 }
 
 .github-btn,
+.producthunt-btn,
 .donate-btn,
 .enter-btn,
 .secondary-btn,
@@ -293,6 +330,11 @@ section {
     background: var(--card-bg);
     border-radius: 40px;
     padding: 80px 5%;
+}
+
+.problem-container {
+    padding: 60px;
+    text-align: center;
 }
 
 .quote {
@@ -661,40 +703,9 @@ input[type="range"]::-webkit-slider-thumb {
 
 /* Toggle Switch */
 .logo-container {
+    height: 70px;
     display: flex;
     align-items: center;
-    position: relative;
-    overflow: hidden;
-    padding: 5px;
-    border-radius: 8px;
-}
-
-.logo-container::after {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -150%;
-    width: 200%;
-    height: 200%;
-    background: linear-gradient(45deg,
-            transparent 45%,
-            rgba(255, 255, 255, 0.1) 48%,
-            rgba(255, 255, 255, 0.3) 50%,
-            rgba(255, 255, 255, 0.1) 52%,
-            transparent 55%);
-    transform: rotate(-25deg);
-    animation: flareMove 4s infinite linear;
-    pointer-events: none;
-}
-
-@keyframes flareMove {
-    0% {
-        left: -150%;
-    }
-
-    100% {
-        left: 150%;
-    }
 }
 
 .toggle-container {
@@ -980,23 +991,308 @@ input[type="checkbox"]:checked+.toggle-slider::before {
 }
 
 /* Responsive */
-@media (max-width: 768px) {
+
+/* Responsive Enhancements */
+@media (max-width: 1200px) {
     h1 {
-        font-size: 2.5rem;
+        font-size: clamp(4rem, 12vw, 10rem);
+    }
+}
+
+@media (max-width: 1024px) {
+    header {
+        padding: 1rem 1.5rem;
+    }
+
+    .nav-controls {
+        gap: 0.8rem;
+    }
+
+    .github-btn,
+    .producthunt-btn,
+    .donate-btn,
+    .enter-btn,
+    .secondary-btn,
+    .nav-controls .enter-btn {
+        min-width: 120px !important;
+    }
+}
+
+@media (max-width: 768px) {
+    header {
+        top: 0.5rem;
+        left: 0.5rem;
+        right: 0.5rem;
+        padding: 0.6rem 1rem;
+        border-radius: 15px;
+    }
+
+    .logo-container {
+        height: 45px;
+    }
+
+    .nav-controls {
+        gap: 0.5rem;
+    }
+
+    /* Collapse less critical button text */
+    .github-btn,
+    .producthunt-btn,
+    .donate-btn {
+        min-width: 42px !important;
+        width: 42px;
+        height: 42px !important;
+        padding: 0 !important;
+        justify-content: center !important;
+    }
+
+    .github-btn span,
+    .producthunt-btn span,
+    .donate-btn span {
+        display: none;
+    }
+
+    .github-btn i,
+    .producthunt-btn i,
+    .donate-btn i {
+        font-size: 1.2rem;
+        margin: 0;
+    }
+
+    .enter-btn {
+        min-width: 110px !important;
+        height: 42px !important;
+        font-size: 0.85rem;
+        padding: 0 1rem !important;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .lang-controls {
+        display: none;
+        /* Can be enabled if needed, but space is tight */
+    }
+
+    .hero {
+        padding: 0 5%;
+        height: auto;
+        padding-top: 140px;
+        padding-bottom: 60px;
+    }
+
+    .hero-image {
+        width: 220px;
+        height: 220px;
+        margin-bottom: 1.5rem;
+    }
+
+    h1 {
+        font-size: clamp(3rem, 15vw, 6rem);
+        letter-spacing: -2px;
+    }
+
+    .reveal-text span {
+        filter: none !important;
+    }
+
+    .problem-container {
+        padding: 40px 20px;
     }
 
     .tagline {
         font-size: 1.1rem;
+        margin-bottom: 2rem;
     }
 
-    .hero-image {
-        width: 200px;
-        height: 200px;
+    section {
+        padding: 60px 20px;
+    }
+
+    .section-title {
+        font-size: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .card {
+        padding: 1.5rem;
+    }
+
+    .philosophy {
+        padding: 60px 20px;
+        border-radius: 30px;
+    }
+
+    .quote {
+        font-size: 1.5rem;
+    }
+
+    /* App Workspace Adjustments */
+    .app-workspace {
+        padding-top: 100px;
+    }
+
+    .empty-state {
+        padding: 2rem 1.5rem;
+        width: 90%;
+    }
+
+    .empty-state h2 {
+        font-size: 1.2rem;
+    }
+
+    /* Floating Toolbar Mobile Optimizations */
+    .floating-toolbar {
+        width: calc(100% - 20px);
+        bottom: 10px;
+        padding: 0.5rem;
+        gap: 0.4rem;
+        border-radius: 12px;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        justify-content: flex-start;
+        scrollbar-width: none;
+        /* Hide scrollbar Firefox */
+    }
+
+    .floating-toolbar::-webkit-scrollbar {
+        display: none;
+        /* Hide scrollbar Chrome/Safari */
+    }
+
+    .tool-group {
+        gap: 0.3rem;
+        flex-shrink: 0;
+    }
+
+    .divider {
+        height: 20px;
+        margin: 0 2px;
+    }
+
+    .intensity-group span {
+        display: none;
+    }
+
+    input[type="range"] {
+        width: 60px;
+    }
+
+    .tool-btn {
+        padding: 0.5rem;
     }
 
     .mouse-glow {
         display: none;
     }
 
-    /* Disable on mobile for performance */
+    .glass-select {
+        font-size: 0.75rem;
+        padding: 0.2rem 0.4rem;
+    }
+
+    /* Mobile Menu UI */
+    .nav-controls>a:not(.enter-btn) {
+        display: none !important;
+    }
+
+    .menu-toggle {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--border-color);
+        color: white;
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 1.2rem;
+    }
+
+    .mobile-menu-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 2000;
+        display: none;
+        /* Controlled by JS */
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        transform: translateY(-20px);
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .mobile-menu-overlay.active {
+        display: flex;
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .mobile-menu-content {
+        width: 100%;
+        padding: 2rem;
+        text-align: center;
+        position: relative;
+    }
+
+    .menu-close {
+        position: absolute;
+        top: 1rem;
+        right: 1.5rem;
+        background: transparent;
+        border: none;
+        color: var(--text-secondary);
+        font-size: 2rem;
+        cursor: pointer;
+    }
+
+    .mobile-nav {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        align-items: center;
+    }
+
+    .mobile-nav a {
+        color: var(--text-primary);
+        text-decoration: none;
+        font-size: 1.5rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+    }
+
+    .mobile-lang-controls {
+        display: flex;
+        gap: 1rem;
+        margin: 1rem 0;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 3.5rem;
+    }
+
+    .hero-image {
+        width: 180px;
+        height: 180px;
+    }
+
+    /* In extremely small screens, only keep the most important buttons */
+    .nav-controls .github-btn,
+    .nav-controls .producthunt-btn {
+        display: none;
+    }
 }

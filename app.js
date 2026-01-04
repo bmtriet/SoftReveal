@@ -8,6 +8,10 @@ const blurSlider = document.getElementById('blurSlider');
 const zoomSlider = document.getElementById('zoomSlider');
 const snapToggle = document.getElementById('snapToggle');
 const revealAnimSelect = document.getElementById('revealAnimSelect');
+const fileInput = document.getElementById('fileInput');
+const menuToggle = document.getElementById('menuToggle');
+const menuClose = document.getElementById('menuClose');
+const mobileMenu = document.getElementById('mobileMenu');
 
 const btnEdit = document.getElementById('btnEdit');
 const btnPresent = document.getElementById('btnPresent');
@@ -166,6 +170,29 @@ btnClear.addEventListener('click', () => {
     document.querySelectorAll('.blur-segment').forEach(s => s.remove());
 });
 
+// --- Mobile Menu ---
+if (menuToggle) {
+    menuToggle.addEventListener('click', () => {
+        mobileMenu.style.display = 'flex';
+        setTimeout(() => mobileMenu.classList.add('active'), 10);
+    });
+}
+
+if (menuClose) {
+    menuClose.addEventListener('click', () => {
+        mobileMenu.classList.remove('active');
+        setTimeout(() => mobileMenu.style.display = 'none', 400);
+    });
+}
+
+// Close menu on link click
+document.querySelectorAll('.mobile-nav a').forEach(link => {
+    link.addEventListener('click', () => {
+        mobileMenu.classList.remove('active');
+        setTimeout(() => mobileMenu.style.display = 'none', 400);
+    });
+});
+
 // --- Zoom & Image Scaling ---
 zoomSlider.addEventListener('input', (e) => {
     currentScale = parseFloat(e.target.value);
@@ -224,6 +251,14 @@ workspace.addEventListener('drop', (e) => {
     e.preventDefault();
     const files = e.dataTransfer.files;
     if (files.length > 0 && files[0].type.indexOf('image') !== -1) loadImage(files[0]);
+});
+
+emptyState.addEventListener('click', () => {
+    fileInput.click();
+});
+
+fileInput.addEventListener('change', (e) => {
+    if (e.target.files.length > 0) loadImage(e.target.files[0]);
 });
 
 // --- Snapping Logic ---
@@ -342,7 +377,7 @@ function attachSegmentListeners(segment) {
 }
 
 // --- Interaction Handler ---
-canvasOverlay.addEventListener('mousedown', (e) => {
+function onStart(e) {
     if (e.button !== 0) return; // Only left click
 
     const rect = canvasOverlay.getBoundingClientRect();
@@ -383,9 +418,9 @@ canvasOverlay.addEventListener('mousedown', (e) => {
     currentBlurBox = document.createElement('div');
     currentBlurBox.className = `selection-box ${currentShape === 'circle' ? 'circle' : ''}`;
     canvasOverlay.appendChild(currentBlurBox);
-});
+}
 
-window.addEventListener('mousemove', (e) => {
+function onMove(e) {
     const rect = canvasOverlay.getBoundingClientRect();
     const x = (e.clientX - rect.left) / currentScale;
     const y = (e.clientY - rect.top) / currentScale;
@@ -463,9 +498,9 @@ window.addEventListener('mousemove', (e) => {
         currentBlurBox.style.width = width + 'px';
         currentBlurBox.style.height = height + 'px';
     }
-});
+}
 
-window.addEventListener('mouseup', () => {
+function onEnd() {
     if (isResizing) {
         isResizing = false;
         resizingHandle = null;
@@ -500,7 +535,26 @@ window.addEventListener('mouseup', () => {
         currentBlurBox.remove();
         currentBlurBox = null;
     }
-});
+}
+
+canvasOverlay.addEventListener('mousedown', onStart);
+window.addEventListener('mousemove', onMove);
+window.addEventListener('mouseup', onEnd);
+
+canvasOverlay.addEventListener('touchstart', (e) => {
+    const touch = e.touches[0];
+    const target = document.elementFromPoint(touch.clientX, touch.clientY);
+    onStart({ clientX: touch.clientX, clientY: touch.clientY, button: 0, target: target });
+    if (isDrawing || isDragging || isResizing || target.classList.contains('blur-segment')) e.preventDefault();
+}, { passive: false });
+
+window.addEventListener('touchmove', (e) => {
+    const touch = e.touches[0];
+    onMove({ clientX: touch.clientX, clientY: touch.clientY });
+    if (isDrawing || isDragging || isResizing) e.preventDefault();
+}, { passive: false });
+
+window.addEventListener('touchend', onEnd);
 
 // --- Initialization ---
 loadSettings();
